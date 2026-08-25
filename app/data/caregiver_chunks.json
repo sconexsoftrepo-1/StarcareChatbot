@@ -1,0 +1,119 @@
+[
+  {
+    "id": "caregiver-overview",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Overview",
+    "section": "Overview",
+    "page": 3,
+    "content": "This document provides a complete reference of every screen accessible to the Caregiver role in the Starcare application. The Caregiver role is scoped to the houses and Individuals assigned to that caregiver. Administrative modules -- including user, role, and house management, medication management, variance reporting, and audit logging -- are not accessible to Caregivers. The document covers Core Navigation (Dashboard, Individuals, and Homes screens, limited to assigned houses and individuals) and Medication Administration Record (MAR): the Overdue, Upcoming, PRN, Correction Request, and Daily Health Check sections available to Caregivers."
+  },
+  {
+    "id": "caregiver-role-based-access",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Core Navigation",
+    "section": "Role-Based Access",
+    "page": 3,
+    "content": "Role-Based Access: Admin has access to Dashboard, Individuals, Homes, and the Admin module. Caregiver has access to Dashboard, assigned Individuals, and assigned Homes only. Caregiver cannot access the Admin module. Admin can access all houses and all individuals in the system; Caregiver access is limited to their assigned houses and individuals."
+  },
+  {
+    "id": "caregiver-signin-role-flow",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Core Navigation",
+    "section": "Sign-In and Role-Based Access Flow",
+    "page": 3,
+    "content": "End-to-end sign-in and access flow: 1) The user signs in. 2) The application determines the user's role. 3a) If the role is Admin: the user gets Admin Access -- Dashboard shows all houses and individuals; Individuals and Homes screens have full access; the MAR has all sections available; the Admin Module (8 screens: User Management, Role Management, House Management, Medication Variance Report, Medication Management, Med Update Log, Med. Variance Change Log, Azure User Management) is accessible. 3b) If the role is Caregiver: the user gets Caregiver Access -- Dashboard shows assigned houses only; Individuals and Homes screens show assigned records only; the MAR shows only the Overdue, Upcoming, PRN, and Correction Request sections; the Admin Module is not accessible at all. 4) Both roles land on the Patient MAR Screen, where the available actions follow that user's role permissions."
+  },
+  {
+    "id": "caregiver-dashboard",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Core Navigation",
+    "section": "Dashboard",
+    "page": 3,
+    "content": "Dashboard (Caregiver) purpose: Provides the Caregiver with a clinical overview limited to their own assignments after sign-in. Main functionalities: Top navigation for Dashboard, Individuals, and Homes (no Admin option). Overview counts for assigned individuals, individuals needing attention, and raised medication variances, scoped to the caregiver. Assigned individuals grouped by house, with individual cards (name, house, age, needs-attention count, raised-variance count). Restricted to the caregiver's assigned houses and assigned individuals only; the Admin module is not visible or accessible."
+  },
+  {
+    "id": "caregiver-individuals",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Core Navigation",
+    "section": "Individuals",
+    "page": 4,
+    "content": "Individuals (Caregiver) purpose: Gives the caregiver an overview of their assigned individuals and current care status. Main functionalities: Individual list showing individual ID, age, home, needs-attention count, and medications due for administration, limited to assigned individuals. Search field to find an assigned individual by name, individual ID, or home. View Details button per individual, opening that individual's MAR screen. Caregiver can access only the individuals assigned to them per their house assignments."
+  },
+  {
+    "id": "caregiver-homes",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Core Navigation",
+    "section": "Homes",
+    "page": 4,
+    "content": "Homes (Caregiver) purpose: Displays only the houses assigned to the signed-in caregiver. Main functionalities: House cards for assigned houses showing house name, address, individual count, and capacity. View Details opens House Details (address, city/state, country, capacity, current occupancy, active status, and permitted individual information). Individual names on House Details link directly to that individual's MAR. Caregiver can view only the houses assigned to that caregiver."
+  },
+  {
+    "id": "caregiver-mar-overview",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "MAR",
+    "section": "MAR Overview",
+    "page": 5,
+    "content": "MAR Overview (Caregiver) purpose: The main screen used by the caregiver to manage and track medication administration for an assigned individual. Main functionalities: Individual header showing name, individual ID, age, house, allergies, and diagnosis information. Sections available to the caregiver: Overdue, Upcoming, PRN, and Correction Request, each shown only when it contains records. Access to Daily Health Check and side-effect/order document links for assigned individuals. Administrative actions (such as approving variance reports) are not available to the caregiver."
+  },
+  {
+    "id": "caregiver-mar-overdue",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "MAR",
+    "section": "Overdue Section",
+    "page": 5,
+    "content": "Overdue Section (Caregiver) purpose: Lists the assigned individual's medications that have passed their scheduled administration window. Main functionalities: Displays medications requiring Administer Late or Complete Med Variance depending on medication state. Complete Med Variance -- also referred to as creating, filing, submitting, or raising a Medication Variance Report (MVR) -- Step 1: Record Missed Medication dialog (medication name and planned date/time; requires a missed-medication reason). Step 2: Medication Variance Report form (staff classification, staff status, variance discovered date, wrong/error type, description, contributing factors, and flags). Administer Late -- enabled only after the Medication Variance Report workflow above is completed. Step 1: confirms the medication is being administered outside its scheduled window, showing the medication name and planned date/time. Step 2: caregiver records the actual administration date/time to complete the entry. Available for the caregiver's assigned individuals only."
+  },
+  {
+    "id": "caregiver-mar-upcoming",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "MAR",
+    "section": "Upcoming Section",
+    "page": 6,
+    "content": "Upcoming Section (Caregiver) purpose: Lists the assigned individual's medications scheduled for administration. Main functionalities: Administer button visible/enabled only within one hour before through one hour after the planned time. Administer is disabled if the individual has medication in Needs Attention or Overdue state, until resolved. Available for the caregiver's assigned individuals only, subject to the same time-window and attention-state rules as Admin."
+  },
+  {
+    "id": "caregiver-mar-prn",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "MAR",
+    "section": "PRN Section",
+    "page": 6,
+    "content": "PRN Section (Caregiver) purpose: Manages as-needed medications for the assigned individual. Main functionalities: Displays PRN/as-needed medications available for the individual, processed according to the applicable medication workflow, for assigned individuals only."
+  },
+  {
+    "id": "caregiver-mar-correction-request",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "MAR",
+    "section": "Correction Request",
+    "page": 6,
+    "content": "Correction Request (Caregiver) purpose: Displays medication variances that an Admin has flagged as requiring correction. Main functionalities: Correction requests raised by an Admin appear here for the authorized caregiver to review and update. Caregiver can review and correct only records raised for their assigned individuals; caregivers cannot raise a correction request themselves."
+  },
+  {
+    "id": "caregiver-mar-daily-health-check",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "MAR",
+    "section": "Daily Health Check",
+    "page": 6,
+    "content": "Daily Health Check (Caregiver) purpose: Located at the bottom of the MAR; used to record routine health monitoring metrics for an assigned individual. Main functionalities: Select a monitoring metric (e.g., Temperature, Blood Pressure, Blood Glucose) and enter the corresponding value. Save Monitoring adds the entry to the monitoring history with metric, value, recording user, and date/time. Caregiver can record and view Daily Health Check data for assigned individuals only; available metrics are configured by Admin."
+  },
+  {
+    "id": "caregiver-medication-flow",
+    "document": "Starcare_Caregiver_Access_workflow",
+    "role": "caregiver",
+    "module": "Workflow",
+    "section": "End-to-End Medication Administration Flow",
+    "page": 6,
+    "content": "Full medication administration flow for a Caregiver, start to finish: 1) In the Upcoming section, the Administer button is visible/enabled only within one hour before through one hour after the medication's planned time, and is disabled if that individual has any medication in Needs Attention or Overdue state until that's resolved. 2) If the window passes without administration, the medication moves to the Overdue section. 3) From Overdue, the caregiver must first complete Complete Med Variance (also referred to as creating, filing, submitting, or raising a Medication Variance Report): Step 1 is the Record Missed Medication dialog (shows medication name and planned date/time, requires a missed-medication reason); Step 2 is the Medication Variance Report form (staff classification, staff status, variance discovered date, wrong/error type, description, contributing factors, and flags). 4) Only after that Medication Variance Report is completed does Administer Late become enabled: Step 1 confirms administration is happening outside the scheduled window; Step 2 records the actual administration date/time to complete the entry. 5) Separately, if an Admin flags a variance as needing correction, it appears in the caregiver's Correction Request section for the caregiver to review and update -- caregivers cannot raise a correction request themselves, only respond to one raised by an Admin."
+  }
+]

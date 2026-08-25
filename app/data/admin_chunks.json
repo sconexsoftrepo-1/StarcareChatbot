@@ -1,0 +1,245 @@
+[
+  {
+    "id": "admin-role-based-access",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Core Navigation",
+    "section": "Role-Based Access",
+    "page": 3,
+    "content": "Role-Based Access: Admin has access to Dashboard, Individuals, Homes, and the Admin module. Caregiver has access to Dashboard, assigned Individuals, and assigned Homes only. Caregiver cannot access the Admin module. Admin can access all houses and all individuals in the system; Caregiver access is limited to their assigned houses and individuals."
+  },
+  {
+    "id": "admin-signin-role-flow",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Core Navigation",
+    "section": "Sign-In and Role-Based Access Flow",
+    "page": 3,
+    "content": "End-to-end sign-in and access flow: 1) The user signs in. 2) The application determines the user's role. 3a) If the role is Admin: the user gets Admin Access -- Dashboard shows all houses and individuals; Individuals and Homes screens have full access; the MAR has all sections available; the Admin Module (8 screens: User Management, Role Management, House Management, Medication Variance Report, Medication Management, Med Update Log, Med. Variance Change Log, Azure User Management) is accessible. 3b) If the role is Caregiver: the user gets Caregiver Access -- Dashboard shows assigned houses only; Individuals and Homes screens show assigned records only; the MAR shows only the Overdue, Upcoming, PRN, and Correction Request sections; the Admin Module is not accessible at all. 4) Both roles land on the Patient MAR Screen, where the available actions follow that user's role permissions."
+  },
+  {
+    "id": "admin-overview",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Overview",
+    "section": "Overview",
+    "page": 3,
+    "content": "This document provides a complete reference of every screen accessible to the Admin role in the Starcare application. The Admin role has unrestricted access to all modules -- including individual and house navigation, the full Medication Administration Record (MAR), and every administrative module such as user, role, and house management, medication management, variance reporting, and audit logging. The document covers Core Navigation (Dashboard, Individuals, Homes -- available system-wide), Medication Administration Record (MAR -- the individual medication workflow and all of its sections), and Administrative Modules (configuration, management, and reporting screens exclusive to Admin users)."
+  },
+  {
+    "id": "admin-dashboard",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Core Navigation",
+    "section": "Dashboard",
+    "page": 3,
+    "content": "Dashboard (Admin) purpose: Provides the Admin with a high-level clinical overview of the application immediately after sign-in. Main functionalities: Top navigation for Dashboard, Individuals, Homes, and Admin, plus notifications and the signed-in user's profile. Overview counts for assigned individuals, individuals needing attention, and raised medication variances. Individuals grouped by house, showing house name, individual count, and individual cards (name, house, age, needs-attention count, raised-variance count). Unassigned individuals displayed in a dedicated Unassigned section. Admin can view all individuals across all houses, including unassigned individuals."
+  },
+  {
+    "id": "admin-individuals",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Core Navigation",
+    "section": "Individuals",
+    "page": 4,
+    "content": "Individuals (Admin) purpose: Gives an overview of all individuals in the system and their current care status. Main functionalities: Individual list showing individual ID, age, home, needs-attention count, and medications due for administration. Search field to find an individual by name, individual ID, or home. View Details button per individual, opening that individual's MAR screen. Admin can access all individuals in the system, regardless of house assignment."
+  },
+  {
+    "id": "admin-homes",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Core Navigation",
+    "section": "Homes",
+    "page": 4,
+    "content": "Homes (Admin) purpose: Displays the houses or care facilities available in the system. Main functionalities: House cards showing house name, address, individual count, and capacity. View Details opens the House Details page (address, city/state, country, capacity, current occupancy, active status, and assigned individuals). Individual names on the House Details page link directly to that individual's MAR. Admin can view all houses in the system."
+  },
+  {
+    "id": "admin-mar-overview",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "MAR Overview",
+    "page": 5,
+    "content": "MAR Overview (Admin) purpose: The main screen used to manage and track medication administration for a selected individual. Main functionalities: Individual header showing name, individual ID, age, house, allergies, and diagnosis information. Medication sections displayed only when they contain records: Overdue, Upcoming, PRN, Administered, Missed Medication, Correction Request, Daily Health Check. Links to supporting side-effect information and medication order documents. Admin has access to all applicable MAR sections for any individual in the system."
+  },
+  {
+    "id": "admin-mar-overdue",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Overdue Section",
+    "page": 5,
+    "content": "Overdue Section (Admin) purpose: Lists medications that have passed their scheduled administration window and still require attention. Main functionalities: Displays medications requiring Administer Late or Complete Med Variance depending on medication state. Complete Med Variance -- also referred to as creating, filing, submitting, or raising a Medication Variance Report (MVR) -- Step 1: Record Missed Medication dialog (shows medication name and planned date/time, requires a missed-medication reason). Step 2: Medication Variance Report form (captures staff classification, staff status, variance discovered date, wrong/error type, description, contributing factors, and flags e.g., high-alert medication, allergic status). Medication moves to the Missed Medication section only after both steps are completed. Administer Late -- disabled until the Medication Variance Report workflow above is completed via the MVR screen. Step 1: confirms the medication is being administered outside its scheduled window, showing the medication name and planned date/time. Step 2: records the actual administration date/time to complete the entry. Once completed, the medication moves to the Administered section."
+  },
+  {
+    "id": "admin-mar-upcoming",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Upcoming Section",
+    "page": 6,
+    "content": "Upcoming Section (Admin) purpose: Lists medications scheduled for administration. Main functionalities: Administer button is time-controlled -- visible/enabled only within one hour before through one hour after the planned date and time. Administer is disabled if the individual has any medication in Needs Attention or Overdue state, until resolved. Administering moves the medication to the Administered section."
+  },
+  {
+    "id": "admin-mar-prn",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "PRN Section",
+    "page": 6,
+    "content": "PRN Section (Admin) purpose: Manages medications given as needed rather than on a fixed schedule. Main functionalities: Displays PRN/as-needed medications available for the individual, processed according to the applicable medication workflow."
+  },
+  {
+    "id": "admin-mar-administered",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Administered Section",
+    "page": 6,
+    "content": "Administered Section (Admin) purpose: Provides a consolidated history of medications that have been successfully administered. Main functionalities: Populated from the Upcoming section (administered within the valid window). Populated from Overdue via the Administer Late workflow after the variance process is completed."
+  },
+  {
+    "id": "admin-mar-missed-medication",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Missed Medication Section",
+    "page": 6,
+    "content": "Missed Medication Section (Admin) purpose: Lists medications for which a missed-medication reason and the required variance report have been submitted. Main functionalities: When the user completes the Medication Variance action for a medication from the Overdue section, that medication will automatically move to the Missed Medications section."
+  },
+  {
+    "id": "admin-mar-correction-request",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Correction Request",
+    "page": 6,
+    "content": "Correction Request (Admin) purpose: Manages medication variances that an Admin has flagged as requiring correction. Main functionalities: Admin raises a correction request from the Medication Variance Report for a specific medication. Request is displayed for the authorized caregiver to review and update, creating a controlled Admin-review / caregiver-correction workflow."
+  },
+  {
+    "id": "admin-mar-mvr-review",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Medication Variance Report Review",
+    "page": 7,
+    "content": "Medication Variance Report Review (Admin) purpose: Opens a read-only preview of a medication's Medication Variance Report via Review Med Variant. Main functionalities: Shows individual, medication, scheduled and actual time, staff and date information, incident details, flags, and other variance information, so the user can review it before taking further action."
+  },
+  {
+    "id": "admin-mar-side-effects-order-docs",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Side Effects and Order Documents",
+    "page": 7,
+    "content": "Side Effects and Order Documents (Admin) purpose: Provides access to supporting documentation linked to a medication record. Main functionalities: Displays links to side-effect information and the medication order document, uploaded and maintained through Admin Medication Management, and viewable from the MAR medication record."
+  },
+  {
+    "id": "admin-mar-daily-health-check",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "MAR",
+    "section": "Daily Health Check",
+    "page": 7,
+    "content": "Daily Health Check (Admin) purpose: Located at the bottom of the MAR; used to record and review routine health monitoring metrics. Main functionalities: Select a monitoring metric (e.g., Temperature, Blood Pressure, Blood Glucose) and enter the corresponding value. Save Monitoring adds the entry to the monitoring history with metric, value, recording user, and date/time. Available monitoring metrics can be configured/extended from Admin Medication Management."
+  },
+  {
+    "id": "admin-module-admin-dashboard",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Admin Dashboard",
+    "page": 7,
+    "content": "Admin Dashboard purpose: Entry point for all administrative functions of Starcare; restricted to Admin users. Main functionalities: Provides access to User Management, Role Management, House Management, Medication Variance Report, Medication Management, Daily Log, Audit Trail, and Azure User Management."
+  },
+  {
+    "id": "admin-module-user-management",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "User Management",
+    "page": 8,
+    "content": "User Management purpose: Allows the Admin to view and manage the users in the system. Main functionalities: User list showing email address, active status, assigned roles, and house assignments. Selecting a user opens a management area to assign or remove roles for that user. Admin can assign or remove house access for a user -- this directly determines what a Caregiver can access elsewhere in the application."
+  },
+  {
+    "id": "admin-module-role-management",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Role Management",
+    "page": 8,
+    "content": "Role Management purpose: Used to create and maintain application roles. Main functionalities: Displays existing roles with a search option by name or description. Create New Role form (role name and optional description); role names must be unique. Roles can be edited or deleted; roles assigned to active users should not be deleted until those assignments are removed."
+  },
+  {
+    "id": "admin-module-house-management",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "House Management",
+    "page": 8,
+    "content": "House Management purpose: Admin-only module for managing houses, facilities, and individual placements. Main functionalities: Displays all houses with active status, address, phone/email, house type, capacity, occupancy, and creation/update details. Search by house name, address, city, or description. Create New House form: name, address, city, state, ZIP code, country, phone number, capacity, email, house type, timezone, and description (house names must be unique). Assign Individual to House form: individual, start date, assignment reason, plus optional care level, room/bed number, monthly rate, payment source, allergies at admission, and admission notes. Discharge Individual ends an active house assignment; Delete House removes a house (active assignments should be cleared or reassigned first)."
+  },
+  {
+    "id": "admin-module-medication-management",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Medication Management",
+    "page": 9,
+    "content": "Medication Management purpose: Centralized screen for administrators to manage medications and monitoring metrics for a selected individual. Main functionalities: Select a House, then an Individual, to display that individual's medication information. Add Monitoring Metric (Metric Name and optional Description). Add Medication form: Drug Name, Strength, Dosage Instructions, Quantity, Frequency, Repeat Pattern, and Priority."
+  },
+  {
+    "id": "admin-module-mvr",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Medication Variance Reports (MVR)",
+    "page": 9,
+    "content": "Medication Variance Reports (MVR) purpose: Centralized tracking of medication variances across the system, including review and approval. Main functionalities: Summary cards: Total Records, Pending Review, Reviewed, Correction Request, Approved. MVR Records table with search by individual name and filters by date range and status. Record columns: individual, medication, dosage, scheduled time, actual time, DSP, type/remarks, reported time, priority, and status. Status-dependent actions: Overdue (View Details, Enable Administer); Pending (View Details, Add Note, Enable Administer); Reviewed (View Details, Download PDF, with Preview PDF and Edit Report inside View Details). From the Preview PDF, Admin can Approve the report, send a Correction Request back to the caregiver, or Download PDF."
+  },
+  {
+    "id": "admin-module-daily-log",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Daily Log",
+    "page": 9,
+    "content": "Daily Log purpose: Centralized audit trail of all actions performed across the application. Main functionalities: Summary cards: Total Events, Today Events, Update Actions, Admin Users. Search by user or individual; filter by module, action, and date range. Audit Logs table: Date and Time, User Name, User Role, Individual Name, Module, Action, and Changes. View Changes opens a Change Details window showing action type, module, field count, timing, performer, associated individual, and Previous/New values per field."
+  },
+  {
+    "id": "admin-module-med-variance-change-log",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Med. Variance Change Log",
+    "page": 10,
+    "content": "Med. Variance Change Log purpose: Detailed report view of Medication Variance Report records sourced from the backend report endpoint. Main functionalities: Page header shows title, description, last-updated time, and a Refresh button. Search by client, medication, or staff; filter by Error Type and Staff; From Date/To Date range filter; Clear Filters option. Table columns: Staff, Client Name, Address, Medication, Medication Strength, Error Date, Day, Time, Classification, and Status. Sortable column headers."
+  },
+  {
+    "id": "admin-module-azure-user-management",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Administrative Modules",
+    "section": "Azure User Management",
+    "page": 10,
+    "content": "Azure User Management purpose: Manages Employee Portal user accounts, roles, and house access at the identity/provisioning level. Main functionalities: Left panel: search existing users by name or email; results show email, status, assigned roles, and number of houses. New User form: select existing Employee Portal user name and new Employee Portal email, then assign a role. House field is enabled only when the Caregiver role is selected; disabled for the Administrator role (Admins have access to all houses). Selecting an existing user shows details organized into Access and Profile Details, including Role Management history (role, assigned date, assigned by), and lets the Admin manage roles and house access."
+  },
+  {
+    "id": "admin-medication-variance-flow",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Workflow",
+    "section": "End-to-End Medication Administration and Variance Resolution Flow",
+    "page": 9,
+    "content": "Full medication administration and variance resolution flow for an Admin, start to finish: 1) In the Upcoming section, the Administer button is enabled only within one hour before through one hour after the planned time, and is disabled if the individual has any medication in Needs Attention or Overdue state until resolved. Administering here moves the medication straight to the Administered section. 2) If the window passes, the medication moves to the Overdue section. 3) From Overdue, Complete Med Variance runs (also referred to as creating, filing, submitting, or raising a Medication Variance Report): Step 1, Record Missed Medication dialog (medication name, planned date/time, requires a missed-medication reason); Step 2, Medication Variance Report form (staff classification, staff status, variance discovered date, wrong/error type, description, contributing factors, flags such as high-alert medication or allergic status). Completing both steps automatically moves the medication to the Missed Medication section. 4) Administer Late is disabled until that Medication Variance Report workflow is completed via the MVR screen; once completed, Step 1 confirms administration outside the scheduled window and Step 2 records the actual administration date/time, after which the medication moves to the Administered section. 5) Separately, from the Medication Variance Reports (MVR) module, the Admin can Review Med Variant (a read-only preview of a report) and, from that Preview PDF, either Approve the report, send a Correction Request back to the caregiver, or Download PDF. A Correction Request the Admin raises then appears in the relevant caregiver's Correction Request section of the MAR for that caregiver to review and update."
+  },
+  {
+    "id": "admin-setup-flow",
+    "document": "Starcare_Admin_Access_workflow",
+    "role": "admin",
+    "module": "Workflow",
+    "section": "New Caregiver, House, and Individual Setup Flow",
+    "page": 8,
+    "content": "Typical end-to-end setup flow an Admin follows to onboard a new house, individual, and caregiver: 1) Role Management -- create a role if needed via Create New Role (role name and optional description; names must be unique). 2) House Management -- create the house via Create New House (name, address, city, state, ZIP code, country, phone number, capacity, email, house type, timezone, description; house names must be unique). 3) House Management -- Assign Individual to House (individual, start date, assignment reason, plus optional care level, room/bed number, monthly rate, payment source, allergies at admission, admission notes). 4) User Management -- assign or remove roles and house access for a user; house access assigned here directly determines what a Caregiver can later see in Individuals, Homes, and the MAR. 5) Azure User Management -- for Employee Portal-level provisioning, use New User (select an existing Employee Portal user name, enter a new Employee Portal email, assign a role); the House field only becomes enabled when the Caregiver role is selected, since Admins already have access to all houses."
+  }
+]
