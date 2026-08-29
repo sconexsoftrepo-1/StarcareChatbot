@@ -5,6 +5,7 @@ from collections import defaultdict, deque
 
 import openai
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
@@ -32,6 +33,22 @@ app = FastAPI(
     description="Role-aware RAG chatbot answering questions from the Starcare Caregiver and Admin manuals only.",
     version="1.0.0",
 )
+
+# CORS: only origins listed in CORS_ALLOWED_ORIGINS (.env) may call this API
+# from a browser. If that list is empty (e.g. local dev with nothing set),
+# fall back to allowing localhost dev servers only — never a silent "*".
+_cors_origins = settings.CORS_ALLOWED_ORIGINS or [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+logger.info("CORS allowed origins: %s", _cors_origins)
 
 FALLBACK_ANSWER = (
     "I could not find enough information about this in the Starcare user manual. "

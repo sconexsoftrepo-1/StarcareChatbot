@@ -63,5 +63,13 @@ class Settings:
 
     RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "30"))
 
+    # Comma-separated list of allowed frontend origins, e.g.
+    # "https://app.starcare.com,https://staging.starcare.com"
+    # Do NOT use "*" in production if you ever send cookies/auth headers with
+    # credentials — browsers reject wildcard + credentials together anyway.
+    CORS_ALLOWED_ORIGINS: list[str] = [
+        o.strip() for o in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()
+    ]
+
 
 settings = Settings()
