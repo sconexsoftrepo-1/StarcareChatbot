@@ -1,11 +1,18 @@
 """
-Run this once (and again any time the manuals change) to (re)build the local
-vector store from the hand-curated, section-based chunks in app/data/.
+Builds/refreshes the local vector store from the hand-curated, section-based
+chunks in app/data/.
+
+Runs automatically once, on API startup (see app/main.py's startup event) —
+you no longer need to run this by hand for a normal first run.
+
+You only need to run it manually when you've edited the manual chunks and
+want to re-embed without restarting the server:
 
     python scripts/ingest_manuals.py
 
 Idempotent: each chunk has a fixed id, so re-running this simply upserts the
-same rows instead of creating duplicates.
+same rows instead of creating duplicates (whether triggered by startup or by
+hand).
 """
 
 import json
@@ -26,7 +33,13 @@ CHUNK_FILES = [
 ]
 
 
-def main():
+def run_ingestion() -> int:
+    """(Re)builds the Chroma collection from the manual chunk files.
+
+    Returns the number of chunks now stored in the collection. Safe to call
+    repeatedly (upsert on fixed chunk ids) — used both by the FastAPI startup
+    event and by this script's CLI entrypoint below.
+    """
     if not settings.AZURE_OPENAI_API_KEY or not settings.AZURE_OPENAI_ENDPOINT:
         raise SystemExit(
             "AZURE_OPENAI_API_KEY and/or AZURE_OPENAI_ENDPOINT are not set. Add them to your .env file first."
@@ -76,9 +89,11 @@ def main():
     # upsert = safe to re-run without creating duplicates
     collection.upsert(ids=ids, documents=documents, metadatas=metadatas, embeddings=embeddings)
 
-    print(f"Done. Collection '{settings.CHROMA_COLLECTION}' now has {collection.count()} chunks "
+    count = collection.count()
+    print(f"Done. Collection '{settings.CHROMA_COLLECTION}' now has {count} chunks "
           f"stored at {settings.CHROMA_DIR}")
+    return count
 
 
 if __name__ == "__main__":
-    main()
+    run_ingestion()

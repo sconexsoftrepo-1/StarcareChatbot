@@ -1,4 +1,7 @@
+import asyncio
 import logging
+import os
+import sys
 import time
 import uuid
 from collections import defaultdict, deque
@@ -9,6 +12,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
+
+# scripts/ lives outside the app package (kept there so it can also be run by
+# hand: `python scripts/ingest_manuals.py`, e.g. after editing the manuals).
+# Add it to sys.path so it can be imported here too, and called automatically
+# on API startup below instead of requiring that manual step for a first run.
+# main.py now lives at the project root (sibling of app/ and scripts/), not
+# inside app/. scripts/ is a direct sibling here, so no ".." needed.
+_SCRIPTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "scripts"))
+if _SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPTS_DIR)
+
 from app.models import (
     ChatRequest,
     ChatResponse,
@@ -24,6 +38,7 @@ from app.llm_service import generate_answer
 from app.escalation import log_escalation
 from app.email_draft import build_support_email_draft
 from app.rate_limiter import LocallyRateLimited
+from ingest_manuals import run_ingestion  # scripts/ingest_manuals.py, see sys.path setup above
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger("starcare-rag")
@@ -49,6 +64,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 logger.info("CORS allowed origins: %s", _cors_origins)
+
+
+@app.on_event("startup")
+async def ingest_manuals_on_startup():
+    # Ensures the Chroma collection is built/up to date before the API starts
+    # accepting chat requests — no separate manual `python scripts/ingest_manuals.py`
+    # step needed for a normal run. Idempotent (upsert on fixed chunk ids), so
+    # this is safe to run on every startup, including restarts.
+    # Runs in a worker thread (it's blocking sync code) so it doesn't stall
+    # the event loop or any other startup work.
+    logger.info("Running manual ingestion...")
+    try:
+        count = await asyncio.to_thread(run_ingestion)
+        logger.info("Manual ingestion complete: %d chunks in collection.", count)
+    except Exception:
+        logger.exception(
+            "Manual ingestion failed on startup. The API will still start, but "
+            "chat requests may return 'not enough information' until this is fixed "
+            "(check AZURE_OPENAI_API_KEY / AZURE_OPENAI_ENDPOINT and app/data/*.json)."
+        )
+
 
 FALLBACK_ANSWER = (
     "I could not find enough information about this in the Starcare user manual. "
