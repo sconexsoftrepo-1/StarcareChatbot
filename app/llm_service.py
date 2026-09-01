@@ -12,23 +12,10 @@ during a burst of 200-500 simultaneous users.
 import json
 from typing import List
 
-import httpx
-from openai import AsyncAzureOpenAI
-
+from app.azure_client import get_async_client
 from app.config import settings
 from app.rag_service import RetrievedChunk, llm_semaphore
 from app.rate_limiter import AsyncRateLimiter
-
-_client = AsyncAzureOpenAI(
-    api_key=settings.AZURE_OPENAI_API_KEY,
-    azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
-    api_version=settings.AZURE_OPENAI_API_VERSION,
-    timeout=settings.LLM_TIMEOUT_SECONDS,
-    max_retries=settings.LLM_MAX_RETRIES,
-    http_client=httpx.AsyncClient(
-        limits=httpx.Limits(max_connections=200, max_keepalive_connections=50)
-    ),
-)
 
 # Paces chat completion calls to stay under the Azure deployment's own RPM
 # quota — this is the pool that was actually failing (embeddings held up fine).
@@ -124,7 +111,7 @@ async def generate_answer(
         )
         if settings.LLM_SEND_TEMPERATURE:
             create_kwargs["temperature"] = 0
-        completion = await _client.chat.completions.create(**create_kwargs)
+        completion = await get_async_client().chat.completions.create(**create_kwargs)
 
     raw = completion.choices[0].message.content
     try:

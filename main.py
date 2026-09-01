@@ -79,7 +79,12 @@ async def ingest_manuals_on_startup():
     try:
         count = await asyncio.to_thread(run_ingestion)
         logger.info("Manual ingestion complete: %d chunks in collection.", count)
-    except Exception:
+    except BaseException:
+        # Catch BaseException, not just Exception: nothing here should ever stop
+        # the app from starting. A dead vector store just means chat returns the
+        # "not enough information" fallback until AZURE_OPENAI_API_KEY /
+        # AZURE_OPENAI_ENDPOINT and app/data/*.json are fixed — /health, /docs
+        # and the rest of the API stay up so the problem is actually debuggable.
         logger.exception(
             "Manual ingestion failed on startup. The API will still start, but "
             "chat requests may return 'not enough information' until this is fixed "

@@ -19,23 +19,12 @@ import asyncio
 from typing import List, TypedDict
 
 import chromadb
-import httpx
 from chromadb.config import Settings as ChromaSettings
-from openai import AsyncAzureOpenAI
 
+from app.azure_client import get_async_client
 from app.config import settings
 from app.rate_limiter import AsyncRateLimiter
 
-_client = AsyncAzureOpenAI(
-    api_key=settings.AZURE_OPENAI_API_KEY,
-    azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
-    api_version=settings.AZURE_OPENAI_API_VERSION,
-    timeout=settings.LLM_TIMEOUT_SECONDS,
-    max_retries=settings.LLM_MAX_RETRIES,
-    http_client=httpx.AsyncClient(
-        limits=httpx.Limits(max_connections=200, max_keepalive_connections=50)
-    ),
-)
 _chroma = chromadb.PersistentClient(
     path=settings.CHROMA_DIR,
     settings=ChromaSettings(anonymized_telemetry=False),
@@ -67,7 +56,7 @@ class RetrievedChunk(TypedDict):
 async def embed(text: str) -> List[float]:
     await embedding_rate_limiter.acquire()
     async with llm_semaphore:
-        resp = await _client.embeddings.create(
+        resp = await get_async_client().embeddings.create(
             model=settings.AZURE_OPENAI_EMBEDDING_DEPLOYMENT, input=text
         )
     return resp.data[0].embedding

@@ -12,9 +12,13 @@ Target app: `chatbot-starcare-prod` — https://chatbot-starcare-prod.azurewebsi
   is set) the escalation SQLite log goes to `/home/data/` (persistent) and the
   Chroma vector store goes to `/tmp/starcare/` (rebuilt from `app/data/*.json`
   on every startup — it's only ~40 chunks).
-- **Startup.** `python main.py` starts uvicorn and binds `$PORT` (Azure), else
-  `$WEBSITES_PORT`, else `8000`. You must set this as the Startup Command in the
-  portal (step 2 below) — it can't be set from the workflow with publish-profile auth.
+- **Startup.** Served by gunicorn + Uvicorn worker via `gunicorn.conf.py`
+  (binds `$PORT`, single worker — see the file's comments). You must set the
+  Startup Command in the portal (step 2 below) — it can't be set from the
+  workflow with publish-profile auth. `python main.py` still works for local dev.
+- **Boots even without the key.** If `AZURE_OPENAI_API_KEY` is missing the app
+  still starts (so `/health` and `/docs` work); chat just returns the fallback
+  answer until the key is set. It no longer crashes the container.
 - **CORS.** Defaults to allowing every origin so the widget works immediately.
 
 ## One-time Azure setup
@@ -41,10 +45,11 @@ connect GitHub — this is what runs `pip install`).
 App Service → **Settings → Configuration → General settings → Startup Command**:
 
 ```
-python main.py
+python -m gunicorn main:app -c gunicorn.conf.py
 ```
 
-Then **Save** (the app restarts).
+Then **Save** (the app restarts). `python main.py` also works but gunicorn +
+Uvicorn worker is the supported setup on App Service.
 
 > This **cannot** be set from the GitHub Actions workflow: `azure/webapps-deploy`
 > rejects `startup-command` when it authenticates with a publish profile

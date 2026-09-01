@@ -41,8 +41,16 @@ def run_ingestion() -> int:
     event and by this script's CLI entrypoint below.
     """
     if not settings.AZURE_OPENAI_API_KEY or not settings.AZURE_OPENAI_ENDPOINT:
-        raise SystemExit(
-            "AZURE_OPENAI_API_KEY and/or AZURE_OPENAI_ENDPOINT are not set. Add them to your .env file first."
+        # RuntimeError (not SystemExit): when this runs from the FastAPI startup
+        # event, SystemExit derives from BaseException and slips past the
+        # `except Exception` there, taking the whole app down (opaque 503 on
+        # Azure). RuntimeError is caught, so the app still boots and chat
+        # requests return the "not enough information" fallback until the key
+        # is configured.
+        raise RuntimeError(
+            "AZURE_OPENAI_API_KEY and/or AZURE_OPENAI_ENDPOINT are not set. "
+            "On Azure set AZURE_OPENAI_API_KEY under App Service -> Settings -> "
+            "Environment variables -> App settings. Locally, add it to a .env file."
         )
 
     client = AzureOpenAI(
