@@ -69,6 +69,10 @@ jobs:
           app-name: 'chatbot-starcare-prod'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EC86A389336446F1AD5C849CA559422A }}
-          # FastAPI is ASGI — Azure's default gunicorn command can't serve it.
-          # main.py starts uvicorn itself on the port Azure provides.
-          startup-command: 'python main.py'
+          # NOTE: `startup-command` is NOT supported by azure/webapps-deploy when
+          # using publish-profile auth. FastAPI is ASGI and Azure's default
+          # gunicorn command can't serve it, so the startup command MUST be set
+          # once in the portal instead:
+          #   App Service -> Settings -> Configuration -> General settings
+          #   -> Startup Command:  python main.py
+          # (see DEPLOYMENT.md)

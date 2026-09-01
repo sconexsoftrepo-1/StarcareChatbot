@@ -13,7 +13,8 @@ Target app: `chatbot-starcare-prod` — https://chatbot-starcare-prod.azurewebsi
   Chroma vector store goes to `/tmp/starcare/` (rebuilt from `app/data/*.json`
   on every startup — it's only ~40 chunks).
 - **Startup.** `python main.py` starts uvicorn and binds `$PORT` (Azure), else
-  `$WEBSITES_PORT`, else `8000`.
+  `$WEBSITES_PORT`, else `8000`. You must set this as the Startup Command in the
+  portal (step 2 below) — it can't be set from the workflow with publish-profile auth.
 - **CORS.** Defaults to allowing every origin so the widget works immediately.
 
 ## One-time Azure setup
@@ -35,7 +36,7 @@ Optional, to restrict browser origins later:
 Leave `SCM_DO_BUILD_DURING_DEPLOYMENT` = `true` (set automatically when you
 connect GitHub — this is what runs `pip install`).
 
-### 2. Startup command
+### 2. Startup command (required — set it in the portal)
 
 App Service → **Settings → Configuration → General settings → Startup Command**:
 
@@ -43,12 +44,14 @@ App Service → **Settings → Configuration → General settings → Startup Co
 python main.py
 ```
 
-> The GitHub Actions workflow also sets this on every deploy
-> (`startup-command: 'python main.py'`). **But if you disconnect and reconnect
-> the Deployment Center, Azure regenerates the workflow file and your
-> `startup-command` line is lost.** Setting it here in the portal makes it
-> stick regardless. After reconnecting, re-add the `startup-command` line to
-> `.github/workflows/main_chatbot-starcare-prod.yml` if you want it in CI too.
+Then **Save** (the app restarts).
+
+> This **cannot** be set from the GitHub Actions workflow: `azure/webapps-deploy`
+> rejects `startup-command` when it authenticates with a publish profile
+> (`Error: startup-command is not a valid input ... with publish-profile auth
+> scheme`). The portal setting is the only way unless you switch the workflow to
+> Azure-login (OIDC) auth. It persists across deploys; you only re-set it if you
+> disconnect/reconnect the Deployment Center.
 
 ### 3. Deploy
 
