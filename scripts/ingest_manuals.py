@@ -21,6 +21,16 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# Make `sqlite3` point at the bundled-modern-SQLite pysqlite3 before chromadb is
+# imported (Azure's system sqlite3 is too old for chromadb). Same swap as
+# app/__init__.py, repeated here because this script imports chromadb before the
+# `app` package when run standalone (`python scripts/ingest_manuals.py`).
+try:
+    __import__("pysqlite3")
+    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+except ModuleNotFoundError:
+    pass
+
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 from openai import AzureOpenAI
