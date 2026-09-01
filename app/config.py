@@ -99,13 +99,15 @@ class Settings:
 
     RATE_LIMIT_PER_MINUTE: int = 30
 
-    # --- CORS -------------------------------------------------------------
-    # Default: allow any origin, so the chat widget works from any site the
-    # moment it's deployed. To lock it down, set an App setting
-    #   CORS_ALLOWED_ORIGINS = https://app.starcare.com,https://portal.starcare.com
-    # (comma-separated). When a specific list is set, credentialed requests are
-    # allowed; with the "*" default they are not (browsers forbid that combo).
-    CORS_ALLOWED_ORIGINS: list[str] = _csv_env("CORS_ALLOWED_ORIGINS") or ["*"]
+    # Comma-separated list of allowed frontend origins, e.g.
+    # "https://app.starcare.com,https://staging.starcare.com"
+    # Do NOT use "*" in production if you ever send cookies/auth headers with
+    # credentials — browsers reject wildcard + credentials together anyway.
+    CORS_ALLOWED_ORIGINS: list[str] = [
+        "https://hl7-mgt-portals-dev.vercel.app",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
 
 
 settings = Settings()
