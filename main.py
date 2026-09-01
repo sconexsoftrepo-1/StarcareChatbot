@@ -39,6 +39,7 @@ from app.llm_service import generate_answer
 from app.escalation import log_escalation
 from app.email_draft import build_support_email_draft
 from app.rate_limiter import LocallyRateLimited
+from app.azure_client import AzureOpenAINotConfigured
 from ingest_manuals import run_ingestion  # scripts/ingest_manuals.py, see sys.path setup above
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -163,6 +164,17 @@ async def azure_rate_limit_handler(request: Request, exc: openai.RateLimitError)
         content={
             "detail": "The assistant is receiving too many requests right now. Please try again in a moment."
         },
+    )
+
+
+@app.exception_handler(AzureOpenAINotConfigured)
+async def azure_not_configured_handler(request: Request, exc: AzureOpenAINotConfigured):
+    # AZURE_OPENAI_API_KEY isn't set. The app still runs (health/docs/greetings
+    # work); anything that needs the model returns this instead of a 500.
+    logger.error("Azure OpenAI not configured: %s", exc)
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "The assistant is not fully configured yet. Please try again later."},
     )
 
 
