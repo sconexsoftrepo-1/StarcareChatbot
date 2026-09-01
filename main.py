@@ -256,3 +256,17 @@ async def escalate(payload: EscalateRequest):
         issue=payload.issue,
     )
     return EscalateResponse(ticket_number=ticket_number, status="OPEN")
+
+
+if __name__ == "__main__":
+    # Lets this be started as `python main.py` (e.g. Azure App Service
+    # Startup Command) instead of requiring `uvicorn main:app ...` on the
+    # command line. Azure doesn't always inject $PORT for Linux App Service
+    # (that's more of a Heroku-style convention), but we check for it — along
+    # with $WEBSITES_PORT, which Azure does use when you've set a custom port
+    # in Configuration -> General settings -> Startup Command / Networking —
+    # and fall back to 8000, Azure's default expected port, if neither is set.
+    import uvicorn
+
+    port = int(os.getenv("PORT") or os.getenv("WEBSITES_PORT") or 8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
