@@ -37,9 +37,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: python-app
+          include-hidden-files: true
           path: |
             .
             !antenv/
+            !.git/
+            !venv/
+            !chroma_data/
+            !**/__pycache__/
 
       # 🚫 Opting Out of Oryx Build
       # If you prefer to disable the Oryx build process during deployment, follow these steps:
@@ -64,3 +69,6 @@ jobs:
           app-name: 'chatbot-starcare-prod'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EC86A389336446F1AD5C849CA559422A }}
+          # FastAPI is ASGI — Azure's default gunicorn command can't serve it.
+          # main.py starts uvicorn itself on the port Azure provides.
+          startup-command: 'python main.py'

@@ -1,7 +1,9 @@
 .env
+env
 venv/
+antenv/
 __pycache__/
 *.pyc
 chroma_data/
 escalations.db
-.env
+.python-version

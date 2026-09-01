@@ -50,21 +50,21 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS: only origins listed in CORS_ALLOWED_ORIGINS (.env) may call this API
-# from a browser. If that list is empty (e.g. local dev with nothing set),
-# fall back to allowing localhost dev servers only — never a silent "*".
-_cors_origins = settings.CORS_ALLOWED_ORIGINS or [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+# CORS: origins come from settings.CORS_ALLOWED_ORIGINS (see app/config.py).
+# Default is ["*"] so the widget works from anywhere right after deploy; set the
+# CORS_ALLOWED_ORIGINS App setting to a comma-separated list to lock it down.
+# Browsers reject "allow all origins" + credentials together, so only enable
+# credentials when a specific origin list is configured.
+_cors_origins = settings.CORS_ALLOWED_ORIGINS
+_allow_credentials = _cors_origins != ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
-    allow_credentials=True,
+    allow_credentials=_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-logger.info("CORS allowed origins: %s", _cors_origins)
+logger.info("CORS allowed origins: %s (credentials=%s)", _cors_origins, _allow_credentials)
 
 
 @app.on_event("startup")
@@ -174,6 +174,19 @@ async def azure_api_error_handler(request: Request, exc: openai.APIError):
 async def unhandled_exception_handler(request: Request, exc: Exception):
     logger.exception("Unhandled error on %s", request.url.path)
     return JSONResponse(status_code=500, content={"detail": "Internal server error."})
+
+
+@app.get("/", tags=["health"])
+async def root():
+    # Hitting the base URL in a browser should show something useful, not a 404.
+    return {
+        "service": "Starcare Support Chatbot API",
+        "status": "ok",
+        "environment": settings.APP_ENV,
+        "docs": "/docs",
+        "health": "/health",
+        "chat": "POST /api/v1/chat",
+    }
 
 
 @app.get("/health", tags=["health"])
