@@ -23,22 +23,21 @@ Target app: `chatbot-starcare-prod` — https://chatbot-starcare-prod.azurewebsi
 
 ## One-time Azure setup
 
-### 1. App setting (the API key)
+### 1. App settings
 
 App Service → **Settings → Environment variables → App settings → + Add**:
 
-| Name | Value |
-|---|---|
-| `AZURE_OPENAI_API_KEY` | *your Azure OpenAI key* |
+| Name | Value | Why |
+|---|---|---|
+| `SCM_DO_BUILD_DURING_DEPLOYMENT` | `true` | **Required.** Makes Oryx run `pip install -r requirements.txt` on the platform during deploy. Without it, `antenv`/`oryx-manifest.toml` are never created and the app dies with `ModuleNotFoundError: No module named 'uvicorn'` (only the base-image `gunicorn` exists). This is normally set automatically when GitHub is connected — verify it's actually there. |
+| `AZURE_OPENAI_API_KEY` | *your Azure OpenAI key* | The one secret the app reads from the environment. |
+| `CORS_ALLOWED_ORIGINS` | `https://app.starcare.com,https://portal.starcare.com` | Optional — restrict browser origins. Set in `app/config.py` otherwise. |
 
-Optional, to restrict browser origins later:
-
-| Name | Value |
-|---|---|
-| `CORS_ALLOWED_ORIGINS` | `https://app.starcare.com,https://portal.starcare.com` |
-
-Leave `SCM_DO_BUILD_DURING_DEPLOYMENT` = `true` (set automatically when you
-connect GitHub — this is what runs `pip install`).
+> The GitHub Actions workflow builds a throwaway `antenv` and deliberately
+> excludes it from the upload (`!antenv/`), relying on Oryx to reinstall on the
+> platform — so `SCM_DO_BUILD_DURING_DEPLOYMENT=true` is what actually installs
+> your dependencies. The first build after enabling it takes ~5–10 min
+> (`chromadb`/`onnxruntime` compile).
 
 ### 2. Startup command (required — set it in the portal)
 
@@ -78,8 +77,13 @@ Interactive docs: `https://chatbot-starcare-prod.azurewebsites.net/docs`
 
 ## Troubleshooting
 
+- **503 on every route + `ModuleNotFoundError: No module named 'uvicorn'` (or
+  `fastapi`) in the container log, plus `Could not find ... antenv` /
+  `oryx-manifest.toml`** — dependencies were never installed. Add the
+  `SCM_DO_BUILD_DURING_DEPLOYMENT=true` app setting and redeploy (see step 1).
 - **App won't start / "Application Error"** — check the Startup Command is
-  `python main.py`. View live logs: App Service → **Log stream**.
+  `python -m gunicorn main:app -c gunicorn.conf.py`. View live logs:
+  App Service → **Log stream**, or `https://<app>.scm.azurewebsites.net/api/logs/docker`.
 - **Chat returns "not enough information" for everything** — the startup manual
   ingestion failed. Almost always a bad/missing `AZURE_OPENAI_API_KEY`, or the
   chat/embedding deployment names in `app/config.py` don't match Foundry.
