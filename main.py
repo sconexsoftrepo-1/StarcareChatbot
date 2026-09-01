@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import re
 import sys
 import time
 import uuid
@@ -91,6 +92,31 @@ FALLBACK_ANSWER = (
     "You can contact support and provide a bit more detail about the issue."
 )
 
+# Small talk / greetings ("hi", "hello", "good morning", ...) are answered
+# directly instead of going through retrieval + the LLM: there's nothing in
+# the manuals to retrieve for these, so without this shortcut they'd hit the
+# "not enough information" fallback, which reads as broken rather than
+# friendly. Matches the WHOLE message (not a substring) so a real question
+# that happens to start with "hi" (e.g. "hi, how do I reset a password?")
+# still goes through the normal RAG path.
+_GREETING_PATTERN = re.compile(
+    r"^\s*(hi+|hello+|hey+|hiya|yo|greetings|good\s*(morning|afternoon|evening|day))"
+    r"\s*(there|team|everyone|guys)?\s*[!.,\s]*$",
+    re.IGNORECASE,
+)
+
+
+def _is_greeting(message: str) -> bool:
+    return bool(_GREETING_PATTERN.match(message))
+
+
+def _greeting_reply(role: str) -> str:
+    return (
+        "Hi there! I'm the Starcare Support Assistant. I can help answer questions "
+        "about using the Starcare app as a {role} — just ask away."
+    ).format(role=role)
+
+
 # --- very simple in-memory rate limiter (per user_id, sliding 60s window) ---
 _request_log: dict[str, deque] = defaultdict(deque)
 
@@ -163,6 +189,27 @@ async def chat(payload: ChatRequest):
     _check_rate_limit(payload.user_id)
 
     history = sessions.get_recent_history(payload.user_id)
+
+    if _is_greeting(payload.message):
+        answer_text = _greeting_reply(payload.role)
+        sessions.add_message(payload.user_id, "user", payload.message)
+        sessions.add_message(payload.user_id, "assistant", answer_text)
+        logger.info(
+            "request_id=%s user_id=%s role=%s greeting_shortcut=True latency_ms=%d",
+            request_id,
+            payload.user_id,
+            payload.role,
+            int((time.time() - start) * 1000),
+        )
+        return ChatResponse(
+            user_id=payload.user_id,
+            answer=answer_text,
+            can_answer=True,
+            confidence=1.0,
+            sources=[],
+            escalation_available=False,
+            follow_ups=[],
+        )
 
     raw_chunks = await retrieve_combined(payload.message, history, payload.role)
     chunks = filter_by_threshold(raw_chunks)
